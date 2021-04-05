@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin("http://localhost:8081")
+@CrossOrigin(origins="*", allowedHeaders = "*")
 @RestController
 public class AuthController {
     @Autowired
@@ -28,7 +28,7 @@ public class AuthController {
         return authservice.isAdminPresent(data);
     }
 
-    @PostMapping("/superadmin/login")
+    @PostMapping("/super/login")
     public boolean isSuperAdminPresent(@RequestBody SuperAdminModel data) {
         return authservice.isSuperAdminPresent(data);
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.config.Passwordconfig;
 import com.example.model.AdminModel;
 import com.example.model.BikeModel;
 import com.example.model.BookingsModel;
@@ -25,10 +26,16 @@ public class AdminService {
     @Autowired
     BookingsRepository bookingsRepository;
 
+    @Autowired
+    Passwordconfig passwordconfig;
+
+    public List<AdminModel> getAllAdmins() {
+        return adminRepository.findAll();
+    }
+
     public AdminModel getAdmin(String email) {
         List<AdminModel> admins = adminRepository.findAll();
         for (AdminModel admin : admins) {
-
             if (admin.getEmail().equals(email))
                 return admin;
         }
@@ -38,24 +45,22 @@ public class AdminService {
     public List<BikeModel> getBikes(Long adminId) {
         List<BikeModel> bikes = bikeRepository.findAll();
         List<BikeModel> adminBikes = new ArrayList<>();
-
         for (BikeModel bike : bikes) {
-            if (bike.getAdminID().equals(adminId)) {
+            if (bike.getAdminID().equals(adminId))
                 adminBikes.add(bike);
-            }
         }
         return adminBikes;
+    }
+
+    public List<BikeModel> getAdminBikes(String email) {
+        AdminModel admin = getAdmin(email);
+        return getBikes(admin.getId());
     }
 
     public AdminModel getAdminDetails(String email) {
         return getAdmin(email);
     }
 
-    public List<BikeModel> getAdminBikes(String email) {
-        AdminModel admin = getAdmin(email);
-        if(admin != null) return getBikes(admin.getId());
-        return null;
-    }
     public AdminModel getAdminById(Long id) {
         Optional<AdminModel> admin = adminRepository.findById(id);
         if (admin.isPresent())
@@ -66,12 +71,15 @@ public class AdminService {
     public AdminModel editAdmin(AdminModel data) {
         AdminModel admin = adminRepository.findById(data.getId()).get();
         admin.setEmail(data.getEmail());
+        if (!data.getPassword().equals(admin.getPassword())) {
+            data.setPassword(passwordconfig.hashPassword(data.getPassword()));
+        }
         admin.setPassword(data.getPassword());
         admin.setMobileNumber(data.getMobileNumber());
         admin.setSellerName(data.getSellerName());
         admin.setCompanyName(data.getCompanyName());
         admin.setCompanyAddress(data.getCompanyAddress());
-        admin = adminRepository.save(data);
+        admin = adminRepository.save(admin);
         return admin;
     }
 
@@ -86,6 +94,6 @@ public class AdminService {
             }
         }
         return userBookings;
-    }    
+    }
 
 }

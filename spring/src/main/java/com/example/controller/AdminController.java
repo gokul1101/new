@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-@CrossOrigin("http://localhost:8081")
+@CrossOrigin(origins="*", allowedHeaders = "*")
 @RestController
 public class AdminController {
     @Autowired
@@ -38,6 +38,7 @@ public class AdminController {
 
     @PostMapping("/admin/bookings")
     public List<BookingsModel> userBookings(@RequestBody AdminModel user) {
+        System.out.println(user.getId());
         return adminService.getBookings(user);
     }
 

@@ -46,7 +46,6 @@ export default function CompDetailContent() {
         <p className="comp-number">{mobileNumber}</p>
       </div>
       <div className="bikes-details container-fluid">
-        {console.log(bikes)}
         {bikes.length > 0 &&
           bikes.map((bike) => (
             <Link to={`/user/bikeDetail/${bike.id}`} key={bike.id}>
@@ -54,9 +53,19 @@ export default function CompDetailContent() {
                 <div className="col-4 bike-modal">
                   Bike Model : {bike.bikeModel}
                 </div>
-                <div className="col-3 bike-otherDetail">{bike.price}</div>
+                <div className="col-3 bike-otherDetail">$ {bike.price}</div>
                 <div className="col-3 bike-otherDetail">{bike.type}</div>
-                <div className="col-2 bike-otherDetail">{bike.status}</div>
+                <div className="col-2 bike-otherDetail">
+                  {bike.status === "true" ? (
+                    <p className="m-0 text-danger">
+                      <b>Booked</b>
+                    </p>
+                  ) : (
+                    <p className="m-0 text-success">
+                      <b>Available</b>
+                    </p>
+                  )}
+                </div>
               </div>
             </Link>
           ))}
