@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://8080-cbdcacdaabeeaebfeedaeaffecacedcaeb.examlyiopb.examly.io/";
+const baseURL = "http://localhost:8080/";
 const apiService = {
   superlogin: (val) => {
     return axios
